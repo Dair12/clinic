@@ -2,6 +2,8 @@ import React from 'react'
 
 export default function schedule() {
   return (
-    <div>schedule</div>
+    <div>
+      <p>Выберите специалиность которая вам нужна</p>
+    </div>
   )
 }
