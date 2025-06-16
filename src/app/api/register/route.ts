@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 export async function POST(req: NextRequest){
     try {
         const data = await req.json();
-        const {name, email, password} = data;
+        const {name, email, password, role} = data;
         if(!name || !email || !password) {
             return NextResponse.json({error: "Все поля обязательны для заполнения"}, {status: 400});
         }
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest){
             name,
             email,
             password: hashedPassword,
+            role: role || "USER",
         },
         });
 
