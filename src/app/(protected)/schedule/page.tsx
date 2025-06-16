@@ -4,13 +4,14 @@ import React from 'react'
 import type {Specialty} from '@/app/(admin)/admin/specialty/dto.ts';
 import type {Specialist} from '@/app/(admin)/admin/specialist/dto';
 import { fetchSpecialties } from '@/app/(admin)/admin/specialty/api';
-import { fetchSpecialistsBySpecialty } from './api';
+import { fetchSpecialistsBySpecialty,addAppointment } from './api';
 
 export default function schedule() {
   const [specialistId, setSpecialistId] = React.useState('');
   const [specialtyId, setSpecialtyId] = React.useState("");
   const [specialties, setSpecialties] = React.useState<Specialty[]>([]);
   const [specialists, setSpecialists] = React.useState<Specialist[]>([]);
+  const [dateTime, setDateTime] = React.useState('');
 
   React.useEffect(() => {  
       async function loadSpecialties() {
@@ -30,6 +31,16 @@ export default function schedule() {
         setSpecialists(data);
       } catch (error) {
         console.error("Ошибка загрузки специалистов:", error);
+      }
+    }
+
+  async function handleSubmit(e: React.FormEvent) {
+      e.preventDefault();
+      try {
+        const response = await addAppointment(specialistId, dateTime);
+        console.log("Запись успешно создана:", response);
+      } catch (error) {
+        console.error("Ошибка при создании записи:", error);
       }
     }
 
@@ -62,6 +73,14 @@ export default function schedule() {
             </option>
           ))}
         </select>
+        <input
+          type="datetime-local"
+          value={dateTime}
+          onChange={(e) => setDateTime(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <button onClick={handleSubmit} className="bg-blue-500 text-white p-2 rounded">Записатся</button>
     </div>
   )
 }
